@@ -21,13 +21,14 @@ import static com.travix.medusa.busyflights.domain.utils.FlightSearchConstants.T
 
 
 /**
- * @author  Fotios Kornarakis
+ * @author Fotios Kornarakis
  */
 
 @Service
 public class AirlineRequest implements IAirlineRequest {
 
-    private static final Logger log = Logger.getLogger( AirlineRequest.class.getName() );
+    private static final Logger log = Logger.getLogger(AirlineRequest.class.getName());
+
     @Override
     public StringBuffer sendRequest(String url) {
         try {

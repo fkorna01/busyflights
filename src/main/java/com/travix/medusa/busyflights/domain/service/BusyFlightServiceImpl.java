@@ -11,10 +11,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.travix.medusa.busyflights.domain.utils.FlightSearchConstants.*;
+import static com.travix.medusa.busyflights.domain.utils.FlightSearchConstants.FLIGHTURLS;
 
 /**
- * @author  Fotios Kornarakis
+ * @author Fotios Kornarakis
  */
 @Service
 public class BusyFlightServiceImpl implements IBusyFlightServiceImpl {
@@ -25,6 +25,7 @@ public class BusyFlightServiceImpl implements IBusyFlightServiceImpl {
 
     /**
      * contains a list of flights ordered by fare
+     *
      * @param request
      * @return response
      */
@@ -32,9 +33,8 @@ public class BusyFlightServiceImpl implements IBusyFlightServiceImpl {
     public List<BusyFlightsResponse> searchFlights(BusyFlightsRequest request) {
         List<BusyFlightsResponse> busyFlightsResponses = new ArrayList<>();
 
-        for(int i = 0 ; i < FLIGHTURLS.length; i++) {
+        for (int i = 0; i < FLIGHTURLS.length; i++) {
             busyFlightsResponses.addAll(apiService.parseDetails(apiService.sendRequest(FLIGHTURLS[i][0]), FLIGHTURLS[i][1]));
-
         }
 
         return busyFlightsResponses.stream().filter(p -> p.getDepartureAirportCode().equals(request.getOrigin()) && p.getArrivalDate().

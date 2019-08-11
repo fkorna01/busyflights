@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 
 /**
- * @author  Fotios Kornarakis
+ * @author Fotios Kornarakis
  */
 public class CrazyAirResponse {
     //I have changed basePrice to Big Decimal as can be easily allocated using money representation

@@ -1,9 +1,9 @@
 package com.travix.medusa.busyflights.domain.controller;
 
 
-import com.travix.medusa.busyflights.domain.service.IBusyFlightServiceImpl;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsRequest;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
+import com.travix.medusa.busyflights.domain.service.IBusyFlightServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

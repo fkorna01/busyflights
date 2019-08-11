@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * @author  Fotios Kornarakis
+ * @author Fotios Kornarakis
  */
 public interface IBusyFlightServiceImpl {
 

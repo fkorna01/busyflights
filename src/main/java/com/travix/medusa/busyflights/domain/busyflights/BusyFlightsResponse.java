@@ -3,7 +3,7 @@ package com.travix.medusa.busyflights.domain.busyflights;
 import java.math.BigDecimal;
 
 /**
- * @author  Fotios Kornarakis
+ * @author Fotios Kornarakis
  */
 public class BusyFlightsResponse {
 
@@ -15,6 +15,7 @@ public class BusyFlightsResponse {
     private String destinationAirportCode;
     private String departureDate;
     private String arrivalDate;
+
     public BusyFlightsResponse() {
     }
 
@@ -84,4 +85,16 @@ public class BusyFlightsResponse {
         this.arrivalDate = arrivalDate;
     }
 
+    @Override
+    public String toString() {
+        return "BusyFlightsResponse{" +
+                "airline='" + airline + '\'' +
+                ", supplier='" + supplier + '\'' +
+                ", fare=" + fare +
+                ", departureAirportCode='" + departureAirportCode + '\'' +
+                ", destinationAirportCode='" + destinationAirportCode + '\'' +
+                ", departureDate='" + departureDate + '\'' +
+                ", arrivalDate='" + arrivalDate + '\'' +
+                '}';
+    }
 }

@@ -3,7 +3,7 @@ package com.travix.medusa.busyflights.domain.response;
 import java.math.BigDecimal;
 
 /**
- * @author  Fotios Kornarakis
+ * @author Fotios Kornarakis
  */
 
 public class FlightResponse {

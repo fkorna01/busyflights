@@ -3,7 +3,7 @@ package com.travix.medusa.busyflights.domain.toughjet;
 import java.math.BigDecimal;
 
 /**
- * @author  Fotios Kornarakis
+ * @author Fotios Kornarakis
  */
 public class ToughJetResponse {
     //I have changed basePrice to Big Decimal as can be easily allocated or use it without having fraction issues
