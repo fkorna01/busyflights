@@ -1,14 +1,33 @@
 package com.travix.medusa.busyflights.domain.crazyair;
 
-public class CrazyAirResponse {
+import java.math.BigDecimal;
 
+
+/**
+ * @author  Fotios Kornarakis
+ */
+public class CrazyAirResponse {
+    //I have changed basePrice to Big Decimal as can be easily allocated using money representation
     private String airline;
-    private double price;
+    private BigDecimal price;
     private String cabinclass;
     private String departureAirportCode;
     private String destinationAirportCode;
     private String departureDate;
     private String arrivalDate;
+
+    public CrazyAirResponse(String airline, BigDecimal price, String cabinclass, String departureAirportCode, String destinationAirportCode, String departureDate, String arrivalDate) {
+        this.airline = airline;
+        this.price = price;
+        this.cabinclass = cabinclass;
+        this.departureAirportCode = departureAirportCode;
+        this.destinationAirportCode = destinationAirportCode;
+        this.departureDate = departureDate;
+        this.arrivalDate = arrivalDate;
+    }
+
+    public CrazyAirResponse() {
+    }
 
     public String getAirline() {
         return airline;
@@ -18,11 +37,11 @@ public class CrazyAirResponse {
         this.airline = airline;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(final double price) {
+    public void setPrice(final BigDecimal price) {
         this.price = price;
     }
 
@@ -65,4 +84,5 @@ public class CrazyAirResponse {
     public void setArrivalDate(final String arrivalDate) {
         this.arrivalDate = arrivalDate;
     }
+
 }

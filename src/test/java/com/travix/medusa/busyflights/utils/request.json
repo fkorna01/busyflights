@@ -1,0 +1,7 @@
+{
+  "origin": "HER",
+  "destination": "AMS" ,
+  "departureDate": "2019-12-10",
+  "returnDate" : "2019-12-10",
+  "numberOfPassengers": 2
+}

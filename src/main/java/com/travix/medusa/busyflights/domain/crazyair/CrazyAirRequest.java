@@ -1,5 +1,8 @@
 package com.travix.medusa.busyflights.domain.crazyair;
 
+/**
+ * @author  Fotios Kornarakis
+ */
 public class CrazyAirRequest {
 
     private String origin;

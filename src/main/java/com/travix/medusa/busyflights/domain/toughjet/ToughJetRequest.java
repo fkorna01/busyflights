@@ -1,5 +1,9 @@
 package com.travix.medusa.busyflights.domain.toughjet;
 
+
+/**
+ * @author  Fotios Kornarakis
+ */
 public class ToughJetRequest {
 
     private String from;

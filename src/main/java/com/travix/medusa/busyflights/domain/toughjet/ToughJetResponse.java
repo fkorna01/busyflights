@@ -1,15 +1,34 @@
 package com.travix.medusa.busyflights.domain.toughjet;
 
-public class ToughJetResponse {
+import java.math.BigDecimal;
 
+/**
+ * @author  Fotios Kornarakis
+ */
+public class ToughJetResponse {
+    //I have changed basePrice to Big Decimal as can be easily allocated or use it without having fraction issues
     private String carrier;
-    private double basePrice;
-    private double tax;
-    private double discount;
+    private BigDecimal basePrice;
+    private BigDecimal tax;
+    private BigDecimal discount;
     private String departureAirportName;
     private String arrivalAirportName;
     private String outboundDateTime;
     private String inboundDateTime;
+
+    public ToughJetResponse(String carrier, BigDecimal basePrice, BigDecimal tax, BigDecimal discount, String departureAirportName, String arrivalAirportName, String outboundDateTime, String inboundDateTime) {
+        this.carrier = carrier;
+        this.basePrice = basePrice;
+        this.tax = tax;
+        this.discount = discount;
+        this.departureAirportName = departureAirportName;
+        this.arrivalAirportName = arrivalAirportName;
+        this.outboundDateTime = outboundDateTime;
+        this.inboundDateTime = inboundDateTime;
+    }
+
+    public ToughJetResponse() {
+    }
 
     public String getCarrier() {
         return carrier;
@@ -19,27 +38,27 @@ public class ToughJetResponse {
         this.carrier = carrier;
     }
 
-    public double getBasePrice() {
+    public BigDecimal getBasePrice() {
         return basePrice;
     }
 
-    public void setBasePrice(final double basePrice) {
+    public void setBasePrice(final BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
 
-    public double getTax() {
+    public BigDecimal getTax() {
         return tax;
     }
 
-    public void setTax(final double tax) {
+    public void setTax(final BigDecimal tax) {
         this.tax = tax;
     }
 
-    public double getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(final double discount) {
+    public void setDiscount(final BigDecimal discount) {
         this.discount = discount;
     }
 

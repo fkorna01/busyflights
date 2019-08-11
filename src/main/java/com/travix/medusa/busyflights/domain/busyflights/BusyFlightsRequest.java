@@ -1,5 +1,8 @@
 package com.travix.medusa.busyflights.domain.busyflights;
 
+/**
+ * @author  Fotios Kornarakis
+ */
 public class BusyFlightsRequest {
 
     private String origin;
