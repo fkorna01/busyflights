@@ -29,6 +29,12 @@ public class AirlineRequest implements IAirlineRequest {
 
     private static final Logger log = Logger.getLogger(AirlineRequest.class.getName());
 
+    /**
+     * sends a get request into a "third party provider" and adds it into a string buffer
+     *
+     * @param url
+     * @return StringBuffer
+     */
     @Override
     public StringBuffer sendRequest(String url) {
         try {
@@ -57,6 +63,14 @@ public class AirlineRequest implements IAirlineRequest {
         return null;
     }
 
+    /**
+     * takes a stringbuffer identifies the right site and maps it into an object.
+     *
+     * As providers might return objects in different format it will be necessary to add a case for every provider.
+     *
+     * @param response, site
+     * @return List of BusyFligthtsResponse
+     */
     @Override
     public List<BusyFlightsResponse> parseDetails(StringBuffer response, String site) {
 

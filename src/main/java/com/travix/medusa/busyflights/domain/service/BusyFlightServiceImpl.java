@@ -33,10 +33,12 @@ public class BusyFlightServiceImpl implements IBusyFlightServiceImpl {
     public List<BusyFlightsResponse> searchFlights(BusyFlightsRequest request) {
         List<BusyFlightsResponse> busyFlightsResponses = new ArrayList<>();
 
+        //checks every provider url and sends a request then parses it and adds it into the right object.
         for (int i = 0; i < FLIGHTURLS.length; i++) {
             busyFlightsResponses.addAll(apiService.parseDetails(apiService.sendRequest(FLIGHTURLS[i][0]), FLIGHTURLS[i][1]));
         }
 
+        //lamda to return in order
         return busyFlightsResponses.stream().filter(p -> p.getDepartureAirportCode().equals(request.getOrigin()) && p.getArrivalDate().
                 equals(request.getReturnDate()) && p.getDestinationAirportCode().equals(request.getDestination()) && p.getDepartureDate().equals(request.getDepartureDate()))
                 .sorted(Comparator.comparing(BusyFlightsResponse::getFare)).collect(Collectors.toList());
