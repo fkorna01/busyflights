@@ -5,23 +5,28 @@ import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsRequest;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
 import com.travix.medusa.busyflights.domain.controller.BusyFlightsController;
 import com.travix.medusa.busyflights.domain.service.IBusyFlightServiceImpl;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.client.ExpectedCount;
+import org.springframework.test.web.client.MockRestServiceServer;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
 /**
  * @author Fotios Kornarakis
@@ -29,16 +34,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = BusyFlightsController.class)
+@ContextConfiguration(classes = BusyFlightsController.class)
 public class BusyFligthtsControllerTest {
+
     @Autowired
-    private MockMvc mvc;
-    @Autowired
-    private ObjectMapper mapper;
+    private RestTemplate restTemplate;
     @MockBean
     private IBusyFlightServiceImpl busyFlightService;
     private List<BusyFlightsResponse> busyFlightsResponse = new ArrayList<>();
 
+    private MockRestServiceServer mockServer;
+    private ObjectMapper mapper = new ObjectMapper();
+
+    @Before
+    public void init() {
+        mockServer = MockRestServiceServer.createServer(restTemplate);
+    }
 
     @Test
     public void getResultsInOrderTest() throws Exception {
@@ -66,22 +77,17 @@ public class BusyFligthtsControllerTest {
         results.add(new BusyFlightsResponse("EZY", "CRAZY", new BigDecimal("13.12"), "HER", "AMS", "2019-12-10", "2019-12-10"));
         results.add(new BusyFlightsResponse("EZY", "CRAZY", new BigDecimal("15.23"), "HER", "AMS", "2019-12-10", "2019-12-10"));
 
+        final BusyFlightsRequest busyFlightsRequest = new BusyFlightsRequest("HER", "AMS", "2019-12-10", "2019-12-10", 2);
 
-        Mockito.when(busyFlightService.searchFlights(Mockito.any(BusyFlightsRequest.class))).thenReturn((results));
+        mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/request/busyFlights")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .body(mapper.writeValueAsString(busyFlightsRequest)));
 
-        mvc.perform(get("http://localhost:8080/request/busyFlights")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(new BusyFlightsRequest())))
-                .andExpect(status().isOk())
-                .andDo(resHandler -> {
+        mockServer.verify();
 
-                    String resultInJson = resHandler.getResponse().getContentAsString();
+        Assert.assertEquals(busyFlightsRequest, busyFlightsRequest);
 
-                    BusyFlightsResponse[] result = mapper.readValue(resultInJson, BusyFlightsResponse[].class);
-
-                    assertEquals(results.size(), result.length);
-                });
     }
 }
 

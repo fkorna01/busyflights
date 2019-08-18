@@ -3,46 +3,32 @@ package com.travix.medusa.busyflights.domain.service;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsRequest;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
 import com.travix.medusa.busyflights.domain.request.IAirlineRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import static com.travix.medusa.busyflights.domain.utils.FlightSearchConstants.FLIGHTURLS;
 
 /**
  * @author Fotios Kornarakis
  */
 @Service
 public class BusyFlightServiceImpl implements IBusyFlightServiceImpl {
+    private List<IAirlineRequest> airlineRequestOptions;
 
-
-    @Autowired
-    IAirlineRequest apiService;
-
-    /**
-     * contains a list of flights ordered by fare
-     *
-     * @param request
-     * @return response
-     */
-    @Override
-    public List<BusyFlightsResponse> searchFlights(BusyFlightsRequest request) {
-        List<BusyFlightsResponse> busyFlightsResponses = new ArrayList<>();
-
-        //checks every provider url and sends a request then parses it and adds it into the right object.
-        for (int i = 0; i < FLIGHTURLS.length; i++) {
-            busyFlightsResponses.addAll(apiService.parseDetails(apiService.sendRequest(FLIGHTURLS[i][0]), FLIGHTURLS[i][1]));
-        }
-
-        //lamda to return in order
-        return busyFlightsResponses.stream().filter(p -> p.getDepartureAirportCode().equals(request.getOrigin()) && p.getArrivalDate().
-                equals(request.getReturnDate()) && p.getDestinationAirportCode().equals(request.getDestination()) && p.getDepartureDate().equals(request.getDepartureDate()))
-                .sorted(Comparator.comparing(BusyFlightsResponse::getFare)).collect(Collectors.toList());
+    public BusyFlightServiceImpl(List<IAirlineRequest> airlineRequestOptions) {
+        this.airlineRequestOptions = airlineRequestOptions;
     }
 
+
+    @Override
+    public Stream<BusyFlightsResponse> searchFlights(BusyFlightsRequest request) {
+
+        return airlineRequestOptions
+                .parallelStream()
+                .flatMap(airlineRequestOptions -> airlineRequestOptions
+                        .convertObject(airlineRequestOptions.sendRequest
+                                (airlineRequestOptions.getUrl(airlineRequestOptions)), airlineRequestOptions.getProviderName(airlineRequestOptions)).stream());
+    }
 
 }

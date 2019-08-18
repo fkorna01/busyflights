@@ -3,7 +3,7 @@ package com.travix.medusa.busyflights.domain.service;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsRequest;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 
 /**
@@ -11,5 +11,10 @@ import java.util.List;
  */
 public interface IBusyFlightServiceImpl {
 
-    List<BusyFlightsResponse> searchFlights(BusyFlightsRequest request);
+    /**
+     * sends a parallel request into the providers and collects them into a Stream.
+     * @param request
+     * @return response
+     */
+    Stream<BusyFlightsResponse> searchFlights(BusyFlightsRequest request);
 }
