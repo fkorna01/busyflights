@@ -5,89 +5,69 @@ import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsRequest;
 import com.travix.medusa.busyflights.domain.busyflights.BusyFlightsResponse;
 import com.travix.medusa.busyflights.domain.controller.BusyFlightsController;
 import com.travix.medusa.busyflights.domain.service.IBusyFlightServiceImpl;
+import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.client.ExpectedCount;
-import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
+import static junit.framework.TestCase.assertSame;
+import static org.junit.Assert.assertTrue;
+
 
 /**
  * @author Fotios Kornarakis
  */
 
-
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = BusyFlightsController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BusyFligthtsControllerTest {
 
-    @Autowired
-    private RestTemplate restTemplate;
-    @MockBean
-    private IBusyFlightServiceImpl busyFlightService;
-    private List<BusyFlightsResponse> busyFlightsResponse = new ArrayList<>();
+    @LocalServerPort
+    private int port;
 
-    private MockRestServiceServer mockServer;
-    private ObjectMapper mapper = new ObjectMapper();
-
-    @Before
-    public void init() {
-        mockServer = MockRestServiceServer.createServer(restTemplate);
-    }
+    TestRestTemplate restTemplate = new TestRestTemplate();
+    HttpHeaders requestHeaders = new HttpHeaders();
 
     @Test
-    public void getResultsInOrderTest() throws Exception {
+    public void testCreateStudent() throws Exception {
         final List<BusyFlightsResponse> results = new ArrayList<>();
 
-//        {
-//            "airline": "EZY",
-//                "supplier": "CRAZY",
-//                "fare": 13.12,
-//                "departureAirportCode": "HER",
-//                "destinationAirportCode": "AMS",
-//                "departureDate": "2019-12-10",
-//                "arrivalDate": "2019-12-10"
-//        },
-//        {
-//            "airline": "AEG",
-//                "supplier": "CRAZY",
-//                "fare": 15.23,
-//                "departureAirportCode": "HER",
-//                "destinationAirportCode": "AMS",
-//                "departureDate": "2019-12-10",
-//                "arrivalDate": "2019-12-10"
-//        }
 
-        results.add(new BusyFlightsResponse("EZY", "CRAZY", new BigDecimal("13.12"), "HER", "AMS", "2019-12-10", "2019-12-10"));
-        results.add(new BusyFlightsResponse("EZY", "CRAZY", new BigDecimal("15.23"), "HER", "AMS", "2019-12-10", "2019-12-10"));
+        BusyFlightsRequest busyFlightsRequest = new BusyFlightsRequest();
+        busyFlightsRequest.setNumberOfPassengers(2);
+        busyFlightsRequest.setReturnDate("2019-12-10");
+        busyFlightsRequest.setDepartureDate("2019-12-10");
+        busyFlightsRequest.setDestination("AMS");
+        busyFlightsRequest.setOrigin("HER");
 
-        final BusyFlightsRequest busyFlightsRequest = new BusyFlightsRequest("HER", "AMS", "2019-12-10", "2019-12-10", 2);
+        HttpEntity<String> entity = new HttpEntity<>("{\n" +
+                "  \"origin\": \"HER\",\n" +
+                "  \"destination\": \"AMS\" ,\n" +
+                "  \"departureDate\": \"2019-12-10\",\n" +
+                "  \"returnDate\" : \"2019-12-10\",\n" +
+                "  \"numberOfPassengers\": 2\n" +
+                "}");
 
-        mockServer.expect(ExpectedCount.once(), requestTo(new URI("http://localhost:8080/request/busyFlights")))
-                .andExpect(method(HttpMethod.GET))
-                .andRespond(withStatus(HttpStatus.OK)
-                        .body(mapper.writeValueAsString(busyFlightsRequest)));
+        ResponseEntity<BusyFlightsResponse> response = restTemplate.exchange(createURLWithPort(
+                "/request/busyFlights"), HttpMethod.GET, entity, BusyFlightsResponse.class);
 
-        mockServer.verify();
+    }
 
-        Assert.assertEquals(busyFlightsRequest, busyFlightsRequest);
 
+    private String createURLWithPort(String uri) {
+        return "http://localhost:" + port + uri;
     }
 }
 

@@ -11,14 +11,6 @@ public class BusyFlightsRequest {
     private String returnDate;
     private int numberOfPassengers;
 
-    public BusyFlightsRequest(String origin, String destination, String departureDate, String returnDate, int numberOfPassengers) {
-        this.origin = origin;
-        this.destination = destination;
-        this.departureDate = departureDate;
-        this.returnDate = returnDate;
-        this.numberOfPassengers = numberOfPassengers;
-    }
-
     public String getOrigin() {
         return origin;
     }
